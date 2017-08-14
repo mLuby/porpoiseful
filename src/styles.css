@@ -48,7 +48,18 @@ body {
   /*text-decoration: line-through;*/
 }
 
-.NewTask input {
-  width: 100%;
-  border: thin dotted blue;
+.Task .title {
+  font-weight: bold;
+}
+
+.Task .createdAt {
+  font-style: italic;
+  color: #DDD;
+  margin-left: 5px;
+}
+
+.Task .completedAt {
+  font-style: italic;
+  color: #333;
+  margin-left: 5px;
 }

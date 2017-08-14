@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {db} from "./firebase.js"
+import moment from "moment"
 
 class Tasks extends Component {
   constructor (props) {
@@ -52,9 +53,9 @@ class Tasks extends Component {
         {this.state.tasks.filter(this.state.filter).sort(this.state.sort).map(task => (
           <li className={`Task${task.completedAt?" completed":""}`} title={task.id} key={task.id}>
             <input type="checkbox" checked={task.completedAt} />
-            {task.title && `.title.${task.title}`}
-            {task.completedAt && `.completedAt.${task.completedAt}`}
-            {task.createdAt && `.createdAt.${task.createdAt}`}
+            {task.title && <span className="title">{task.title}</span>}
+            {task.completedAt && <span className="completedAt">{moment(task.completedAt).fromNow()}</span>}
+            {task.createdAt && <span className="createdAt">{moment(task.createdAt).fromNow()}</span>}
           </li>
         ))}
       </ul>
