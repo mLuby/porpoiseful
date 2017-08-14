@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import db from "./firebase.js"
+import {db} from "./firebase.js"
 
 class Tasks extends Component {
   constructor (props) {
@@ -9,15 +9,13 @@ class Tasks extends Component {
   }
 
   setTasks (tasks) {
-    console.log('setting tasks', tasks)
-    console.log("this.state.tasks", this.state.tasks)
-    this.setState({tasks: tasks})
+    this.setState({tasks})
   }
 
   componentWillMount() {
     db.ref('tasks/').on('value', snapshot => {
-      const tasksObj = snapshot.val()
-      const tasks = Object.keys(tasksObj).map(k => tasksObj[k])
+      const tasksObj = snapshot.val() || {} // when no tasks it's null
+      const tasks = Object.keys(tasksObj).map(k => Object.assign(tasksObj[k], {id: k}))
       return this.setTasks(tasks)
     })
   }
@@ -25,7 +23,7 @@ class Tasks extends Component {
   render () { return (
     <ul>
       {this.state.tasks.map(task => (
-        <li key={task.title}>
+        <li key={task.id}>
           <input type="checkbox" />
           {task.title}
         </li>

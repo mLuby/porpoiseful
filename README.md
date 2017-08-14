@@ -8,7 +8,7 @@ Todo app for Getting Things Done.
 - [ ] email to task
 - [ ] snooze/defer tasks
 - [ ] tags (aka projects, categories…)
-- [ ] import from Asana
+- [ ] import from Asana: `node src/importAsana.js path/to/My_PersonalTasks.csv`
 - [ ] task dependencies
 - [ ] break down a task into easier tasks
 - [ ] chance tasks (eg get job, )

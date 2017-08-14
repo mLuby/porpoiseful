@@ -1,11 +1,10 @@
 import React from 'react';
-import db from "./firebase.js"
+import {db} from "./firebase.js"
 import {compose, withState, withHandlers} from "recompose"
 
 function createTaskFromString(taskString) {
   const task = parseTaskString(taskString)
-  console.log("new task", task)
-  db.ref('tasks/' + task.title).set(task)
+  db.ref('/tasks').push(task)
 }
 
 const NewTask = props => (
@@ -33,7 +32,8 @@ function parseTaskString (taskString) {
   const kvPair = /^\.([a-z]+)\.(.+)$/
   const matches = taskString.match(taskStringToKvPairs)
   const kvTuples = matches.map(m => m.match(kvPair).slice(1).map(s => s.trim()))
-  return kvTuples.reduce((acc, item) => merge(acc, {[item[0]]: item[1]}), {})
+  const task = kvTuples.reduce((acc, item) => merge(acc, {[item[0]]: item[1]}), {})
+  task.id = task.id |(task.title)
 }
 
 function merge (obj1, obj2) {
