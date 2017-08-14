@@ -29,6 +29,11 @@ body {
   to { transform: rotate(360deg); }
 }
 
+.NewTask input {
+  width: 100%;
+  border: thin dotted blue;
+}
+
 .TaskList>ul {
   padding: 0;
 }

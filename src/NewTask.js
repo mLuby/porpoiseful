@@ -2,9 +2,16 @@ import React from 'react';
 import {db} from "./firebase.js"
 import {compose, withState, withHandlers} from "recompose"
 
-function createTaskFromString(taskString) {
+function createTaskFromString (taskString) {
+  if (taskString === "") return
   const task = parseTaskString(taskString)
-  db.ref('/tasks').push(task)
+  task.createdAt = task.createdAt || (new Date()).toISOString()
+  task.modifiedAt = task.modifiedAt || (new Date()).toISOString()
+  if (task.id) {
+    db.ref('/tasks/'+task.id).set(task)
+  } else {
+    db.ref('/tasks').push(task)
+  }
 }
 
 const NewTask = props => (
@@ -18,6 +25,7 @@ export default compose(
   withHandlers({
     onChange: props => event => props.setTaskString(event.target.value),
     onSubmit: props => event => {
+      props.setTaskString("")
       event.preventDefault()
       createTaskFromString(props.taskString)
     }
@@ -25,13 +33,13 @@ export default compose(
 )(NewTask)
 
 function parseTaskString (taskString) {
-  taskString += "\n" // so regex catches last term
+  const taskStringN = taskString+"\n" // so regex catches last term
   const taskStringToKvPairs = /(?:\.([a-z]+)\.(.+?)(?=(?:\.[a-z]+\.)|\n))/g
   const kvPair = /^\.([a-z]+)\.(.+)$/
-  const matches = taskString.match(taskStringToKvPairs)
+  const matches = taskStringN.match(taskStringToKvPairs) || [".title."+taskString] // if no keys, use string as title
   const kvTuples = matches.map(m => m.match(kvPair).slice(1).map(s => s.trim()))
   const task = kvTuples.reduce((acc, item) => merge(acc, {[item[0]]: item[1]}), {})
-  task.id = task.id |(task.title)
+  return task
 }
 
 function merge (obj1, obj2) {
