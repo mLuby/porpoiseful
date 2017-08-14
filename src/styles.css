@@ -28,3 +28,22 @@ body {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.TaskList>ul {
+  padding: 0;
+}
+
+.Task {
+  text-align: left;
+  list-style: none;
+}
+
+.Task.completed {
+  color: grey;
+  /*text-decoration: line-through;*/
+}
+
+.NewTask input {
+  width: 100%;
+  border: thin dotted blue;
+}

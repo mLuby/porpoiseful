@@ -4,31 +4,61 @@ import {db} from "./firebase.js"
 class Tasks extends Component {
   constructor (props) {
     super(props)
-    this.state = {tasks: []}
+    this.state = {tasks: [], filter: t=>t, sort: () => -1}
+
     this.setTasks = this.setTasks.bind(this)
+    this.filterCompletedTasks = this.filterCompletedTasks.bind(this)
+    this.filterUncompletedTasks = this.filterUncompletedTasks.bind(this)
   }
 
   setTasks (tasks) {
     this.setState({tasks})
   }
 
+  filterCompletedTasks () {
+    console.log("filter completed tasks…")
+    this.setState({
+      filter: t => t.completedAt,
+      sort: (t1, t2) => t1.completedAt > t2.completedAt ? -1 : 1,
+    })
+  }
+
+  filterUncompletedTasks () {
+    console.log("filter uncompleted tasks…")
+    this.setState({
+      filter: t => !t.completedAt,
+      sort: (t1, t2) => t1.createdAt > t2.createdAt ? -1 : 1,
+    })
+  }
+
   componentWillMount() {
-    db.ref('tasks/').on('value', snapshot => {
+    console.log("loading tasks…")
+    this.filterUncompletedTasks()
+    db.ref('/tasks').on('value', snapshot => {
       const tasksObj = snapshot.val() || {} // when no tasks it's null
       const tasks = Object.keys(tasksObj).map(k => Object.assign(tasksObj[k], {id: k}))
+      console.log("loaded tasks.")
       return this.setTasks(tasks)
     })
   }
 
   render () { return (
-    <ul>
-      {this.state.tasks.map(task => (
-        <li key={task.id}>
-          <input type="checkbox" />
-          {task.title}
-        </li>
-      ))}
-    </ul>
+    <section className="TaskList">
+      <div>
+        <button onClick={this.filterCompletedTasks}>Completed</button>
+        <button onClick={this.filterUncompletedTasks}>Uncompleted</button>
+      </div>
+      <ul>
+        {this.state.tasks.filter(this.state.filter).sort(this.state.sort).map(task => (
+          <li className={`Task${task.completedAt?" completed":""}`} title={task.id} key={task.id}>
+            <input type="checkbox" checked={task.completedAt} />
+            {task.title && `.title.${task.title}`}
+            {task.completedAt && `.completedAt.${task.completedAt}`}
+            {task.createdAt && `.createdAt.${task.createdAt}`}
+          </li>
+        ))}
+      </ul>
+    </section>
   )}
 }
 

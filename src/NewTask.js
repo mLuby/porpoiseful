@@ -8,15 +8,13 @@ function createTaskFromString(taskString) {
 }
 
 const NewTask = props => (
-  <form onSubmit={props.onSubmit}>
-    <label>New Task:
-      <input type="text" placeholder="new task" value={props.taskString} onChange={props.onChange} />
-    </label>
+  <form className="NewTask" onSubmit={props.onSubmit}>
+    <input type="text" placeholder="New task…" value={props.taskString} onChange={props.onChange} />
   </form>
 )
 
 export default compose(
-  withState('taskString', 'setTaskString', '.title. foo bar .due.baz'),
+  withState('taskString', 'setTaskString', ''),
   withHandlers({
     onChange: props => event => props.setTaskString(event.target.value),
     onSubmit: props => event => {
