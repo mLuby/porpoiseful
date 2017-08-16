@@ -10,6 +10,7 @@ class Tasks extends Component {
     this.setTasks = this.setTasks.bind(this)
     this.filterCompletedTasks = this.filterCompletedTasks.bind(this)
     this.filterUncompletedTasks = this.filterUncompletedTasks.bind(this)
+    this.toggleComplete = this.toggleComplete.bind(this)
   }
 
   setTasks (tasks) {
@@ -32,6 +33,14 @@ class Tasks extends Component {
     })
   }
 
+  toggleComplete (task) {
+    return () => {
+      task.completedAt = task.completedAt ? null : (new Date()).toISOString()
+      console.log(`${task.completedAt ? "" : "un"}completing '${task.title}'`)
+      db.ref('/tasks/'+task.id).set(task)
+    }
+  }
+
   componentWillMount() {
     console.log("loading tasks…")
     this.filterUncompletedTasks()
@@ -52,7 +61,7 @@ class Tasks extends Component {
       <ul>
         {this.state.tasks.filter(this.state.filter).sort(this.state.sort).map(task => (
           <li className={`Task${task.completedAt?" completed":""}`} title={task.id} key={task.id}>
-            <input type="checkbox" checked={task.completedAt} />
+            <input type="checkbox" checked={task.completedAt} onClick={this.toggleComplete(task)} />
             {task.title && <span className="title">{task.title}</span>}
             {task.completedAt && <span className="completedAt">{moment(task.completedAt).fromNow()}</span>}
             {task.createdAt && <span className="createdAt">{moment(task.createdAt).fromNow()}</span>}
