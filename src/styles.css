@@ -3,6 +3,7 @@
   padding: 0;
   font-family: sans-serif;
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 .App {
@@ -35,9 +36,11 @@
   display: flex;
 }
 
-.NewTask input {
+input[type="text"] {
   width: 100%;
-  /*border: thin dotted blue;*/
+  border: none;
+  border-bottom: thin dashed black;
+  font-weight: bold;
 }
 
 .TaskList .controls {
@@ -46,10 +49,7 @@
 
 .TaskList .controls button {
   width: 100%;
-}
-
-.TaskList>ul {
-  padding: 0;
+  margin: 5px;
 }
 
 .Task {
@@ -57,11 +57,25 @@
   list-style: none;
   overflow: scroll;
   white-space: nowrap;
+  min-height: 26px /* so edit input doesn't jostle */
 }
 
 .Task.completed {
   color: grey;
-  /*text-decoration: line-through;*/
+}
+
+.Task .editing {
+  margin-top: -4px; /* so edit input doesn't jostle on mobile */
+  /*margin-top: -6px; /* so edit input doesn't jostle on desktop */
+}
+
+.icon {
+  margin-right: 0px; /* so edit input doesn't jostle on mobile */
+  /*margin-right: 2px; /* so edit input doesn't jostle on desktop */
+}
+
+.Task .details {
+  margin-left: 5px;
 }
 
 .Task .title {
