@@ -54,7 +54,7 @@ class Tasks extends Component {
 
   render () { return (
     <section className="TaskList">
-      <div>
+      <div className="controls">
         <button onClick={this.filterCompletedTasks}>Completed</button>
         <button onClick={this.filterUncompletedTasks}>Uncompleted</button>
       </div>

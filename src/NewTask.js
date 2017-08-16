@@ -16,7 +16,9 @@ function createTaskFromString (taskString) {
 
 const NewTask = props => (
   <form className="NewTask" onSubmit={props.onSubmit} action="#">
-    <input type="text" placeholder="New task…" value={props.taskString} onChange={props.onChange} />
+    <label>🆕
+      <input type="text" placeholder="task title…" value={props.taskString} onChange={props.onChange} />
+    </label>
   </form>
 )
 

@@ -1,0 +1,153 @@
+BUGS
+- [ ] make keys a-z for ease of entry
+- [ ] fix nospace regex title: "hasaatributes.createdAt.2017-08-14" https://console.firebase.google.com/u/0/project/porpoiseful-599ba/database/data/tasks/-KrWe0CFvlBjrvY1DcpY
+- [x] make title bold w/o key to ease reading
+
+FEATURES
+q@mluby.com tasks email
+q.mluby.com mobile site
+√ use firebase to start, maybe switch to sqlaas?
+goal: keep today tasks small and accomplishable.
+  √ create task — set prop(s): title completed
+
+  √ list tasks
+
+  _ update task — set 1 prop
+
+  _ set repeating tasks daily
+
+  _ can email tasks to self to be added to unsorted section
+    forward to q@mluby.com
+    first line of forward is settings
+    if any way to auto-st url to original email in gmail that'd be great
+    make both address and settings easy to type on mobile
+      .name. schedule doctor appointment. oh and more... .snooze. 1 day .priority.high.needs.123
+      use regex (?:\.([a-z]+)\.(.+?)(?=(?:\.[a-z]+\.)|\n)) for each match, key = match capture 1 value = match capture 2 https://regex101.com/r/ZwgZTz/1
+
+  _ set multiple tags for tasks
+    use as projects for now
+  _ list tasks by tag
+
+  _ easily accessible resources to complete task: notes, urls, emails, uploaded files
+
+  _ defer/snooze tasks
+    have quick options: tomorrow, weekend, next week, least busy in next 7 days
+      if deadline, usually it's some arbitrary time before deadline (1 day, 1 week, 2 weeks, 1 month)
+
+    I like that asana lets me store tasks in the future and they return when relevant
+    though if something isn't time-based it may never return.
+    maybe "you haven't done anything w tag X in a while" reminder
+
+  _ want to complete one thing and have next unblocked dependencies added to my list (today? tomorrow?)
+    most tasks (esp repeats) do not have dependencies
+  _ break down/expand tasks instead of completing.
+    add children rather than replacing parent task
+    create big task then create blockers (rather than creating blockers and then parent tasks)
+
+  _ async mark task pending (responses, time, tasks)
+    if response, enter time likely to have heard back (polling) eventually can search comms (push/stream)
+    "Do you want me to ask if there's a response every day/2 days/week/month/quarter?"
+
+  √ import from asana csv
+    does not include recurrence info or attachments
+    Task ID,Created At,Completed At,Last Modified,Name,Assignee,Due Date,Tags,Notes,Projects,Parent Task
+    371403212701416,2017-06-24,,2017-08-07,buy amazon items,Mike Luby,,,https://en.wikipedia.org/wiki/Tongue_cleaner,Chores,
+    381455534478686,2017-07-09,,2017-07-09,gym lock ($8 at 24HF),,,,,,buy amazon items
+    276011811600787,2017-02-19,2017-03-18,2017-03-18,cancel Tinder plus subscription,Mike Luby,2017-03-10,,,"Money,Dating",
+    ATTENTION!!! "Truncated at 3000 rows." at end of CSV. How to get more?
+
+
+
+_ snooze/defer tasks and have them come back
+
+_ deal w async tasks (people responding, time, resources)
+
+EXAMPLES
+ 1 buy present for mom needs:3
+ 3 agree w Eric on present needs:4,5
+ 4 schedule call w Eric
+ 5 generate 3 present ideas
+
+ 2 touch toes maybe-on:6
+ 6 bend over stretch 60s repeat:daily maybe:2
+
+ 7 get job! maybe-on:8
+ 8 prepare for job interview maybe-on:9
+ 9 apply to 1 job needs:10
+10 create resume
+
+
+complete 6
+did you complete 2?
+yes: complete 2
+no: repeat 6
+
+complete 9
+did you get an interview?
+yes: complete 9 (though maybe continue repeating it)
+no: repeat 9
+
+
+11 sink three free throws in a row maybe-on:12
+12 shoot free throw
+
+
+13 sink basket
+14 shoot basketball unblock?13
+  shoot basketball
+  sink basket? no
+  shoot basketball
+  sink basket? yes
+
+  shoot free throw (goes in)
+  sink two free throws? no
+  shoot free throw (goes in)
+  sink two free throws? yes
+
+  shoot free throw (goes in)
+  sink two free throws? no
+  shoot free throw (missed)
+  sink two free throws? no
+  shoot free throw (goes in)
+  sink two free throws? no
+  shoot free throw (goes in)
+  sink two free throws? yes
+
+1 collect 3 friends' signatures maybe-on:
+2 get 1 friend's signature
+  get 1 friend's signature
+  collect 3 friends' signatures unblocked? no
+  get 1 friend's signature
+  collect 3 friends' signatures unblocked? no
+  get 1 friend's signature
+  collect 3 friends' signatures unblocked? yes
+
+
+pops up alert asking if next task is unblocked
+what if 2+ maybe tasks?
+  1 schedule date with girl
+  2 girl is interested unblock?1
+  3 girl is available unblock?1
+  4 talk to girl
+
+  talk to girl
+  girl is interested unblock:1? yes
+  girl is available unblock:1? no
+
+  talk to girl
+  girl is interested unblock:1? no
+  girl is available unblock:1? yes
+
+  talk to girl
+  girl is interested unblock:1? yes
+  girl is available unblock:1? no
+
+  talk to girl
+  girl is interested unblock:1? yes
+  girl is available unblock:1? yes
+  schedule date with girl
+
+pops up alert asking if next task is unblocked
+what if 2+ maybe tasks?
+  do back flip
+  get blackjack
