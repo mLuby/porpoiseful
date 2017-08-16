@@ -43,11 +43,11 @@ input[type="text"] {
   font-weight: bold;
 }
 
-.TaskList .controls {
+.TaskList>.controls {
   display: flex;
 }
 
-.TaskList .controls button {
+.TaskList>.controls>button {
   width: 100%;
   margin: 5px;
 }
@@ -57,14 +57,24 @@ input[type="text"] {
   list-style: none;
   overflow: scroll;
   white-space: nowrap;
-  min-height: 26px /* so edit input doesn't jostle */
+  min-height: 26px; /* so edit input doesn't jostle */
 }
 
 .Task.completed {
   color: grey;
 }
 
-.Task .editing {
+.Task.snoozed {
+  color: purple;
+}
+
+.Task .controls {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+.Task.editing {
   margin-top: -4px; /* so edit input doesn't jostle on mobile */
   /*margin-top: -6px; /* so edit input doesn't jostle on desktop */
 }
@@ -78,17 +88,17 @@ input[type="text"] {
   margin-left: 5px;
 }
 
-.Task .title {
+.Task .details>.title {
   font-weight: bold;
 }
 
-.Task .createdAt {
+.Task .details>.createdAt {
   font-style: italic;
   color: #DDD;
   margin-left: 5px;
 }
 
-.Task .completedAt {
+.Task .details>.completedAt {
   font-style: italic;
   color: #333;
   margin-left: 5px;
