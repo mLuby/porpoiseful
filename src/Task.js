@@ -42,11 +42,14 @@ export default compose(
   withHandlers({
     onTitleEdit: props => event => props.setEditTitle(event.target.value),
     onTitleEditSubmit: props => event => {
-      console.log(props.task.title, "->", props.editedTitle)
       event.preventDefault()
       props.setEditing(false)
-      props.task.title = props.editedTitle
-      db.ref("tasks/"+props.task.id).set(props.task)
+      if (props.editedTitle === "") {
+        db.ref("tasks/"+props.task.id).remove().then(() => console.log(`deleted ${props.task.id}:${props.task.title}`)).catch(error => console.error(`failed to delete ${props.task.id}:${props.task.title}`, error))
+      } else {
+        props.task.title = props.editedTitle
+        db.ref("tasks/"+props.task.id).set(props.task).then(() => console.log(`${props.task.title} -> ${props.editedTitle}`)).catch(error => console.error(`failed to edit ${props.task.id}:${props.task.title} -> ${props.editedTitle}`, error))
+      }
     },
     toggleEditing: props => () => {
       props.setEditing(!props.editing)
