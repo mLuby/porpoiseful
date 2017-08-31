@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {db} from "./firebase.js"
 import Task from "./Task.js"
+import moment from "moment"
 
 const CHECK_SNOOZE_MS = 1000
 
@@ -39,7 +40,7 @@ class Tasks extends Component {
     console.log("filter active tasks…")
     this.setState({
       filter: t => !t.completedAt && !t.snoozeTill,
-      sort: (t1, t2) => t1.createdAt > t2.createdAt ? -1 : 1,
+      sort: (t1, t2) => (t1.modifiedAt || t1.createdAt) > (t2.modifiedAt || t2.createdAt) ? -1 : 1,
     })
   }
 
@@ -49,16 +50,16 @@ class Tasks extends Component {
     db.ref('/tasks').on('value', snapshot => {
       const tasksObj = snapshot.val() || {} // when no tasks it's null
       const tasks = Object.keys(tasksObj).map(k => Object.assign(tasksObj[k], {id: k}))
-      console.log("loaded tasks.")
+      console.log(now(), "(re)loaded tasks.")
       return this.setTasks(tasks)
     })
 
     setInterval(checkSnooze.bind(this), CHECK_SNOOZE_MS)
     function checkSnooze () {
-      const now = (new Date()).toISOString()
       this.state.tasks.forEach(task => {
-        if (task.snoozeTill < now) {
-          db.ref(`tasks/${task.id}/snoozeTill`).remove().then(() => console.log(`unsnoozed ${task.id}:${task.title}`)).catch(error => console.error(`failed to unsnooze ${task.id}:${task.title}`, error))
+        if (task.snoozeTill < now()) {
+          db.ref(`tasks/${task.id}/snoozeTill`).remove().then(() => console.log(`unsnoozed ${task.id}:${task.title} ${task.snoozeTill} < ${now()}`)).catch(error => console.error(`failed to unsnooze ${task.id}:${task.title}`, error))
+          db.ref("tasks/"+task.id+"/modifiedAt").set(now())
         }
       })
     }
@@ -78,5 +79,7 @@ class Tasks extends Component {
     </section>
   )}
 }
+
+function now () { return moment().format() }
 
 export default Tasks
